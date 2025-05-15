@@ -28,21 +28,26 @@ num_obs<-c(10,20)  # for different  number of observations
 
 ##############  pit values computation
 
-compute_all_pit<-function(brm_model,sim_data,test_data){
+# stan model
+
+
+compute_all_pit<-function(gp_model,fit_obj,sim_data,test_data){
       # get hypothetical replicated data
-      y_rep <-posterior_predict(brm_model)
+      y_rep <- fit_obj$draws(format = "matrix", variable = "f")
       # compute pit
       y<-sim_data$y
       obs_pit<-pit(y_rep,y) 
        # compute loo-pit
-      lw<-weights(psis(brm_model))      # normalized  log weighs from psis scheme
+      lw <- weights(fit_obj$loo(save_psis=TRUE,cores=4)$psis_object)              # normalized  log weighs from psis scheme
       loo_pit<-pit(y_rep,y,weights=lw,log = TRUE)
       # compute pit with test data
-      y_pred_test <- posterior_predict(brm_model,newdata = test_data[1]) #test_data[1]
+      preds <- gp_model$generate_quantities(fit_obj, data = test_data)            # set "seed" later
+      y_pred_test=preds$draws(format="matrix",variable="f")
       y_test<-test_data$y
-      test_pit<-pit(y_pred_test,y_test)
+      test_pit<-pit(y_pred_test,y_test)                                          # new input x for test_data ?? 
       results<-list(pit=obs_pit,test_pit=test_pit, loo_pit=loo_pit)
      }
+
 
 
 
@@ -131,10 +136,9 @@ compute_pvalues <- function(obs_stat_df,size,stat_tests=uniformity_tests){
         )
         names(pvals) <- names(obs_stat_df) 
             return(pvals)
-}
+      }
 
-
-
+    ## compute rejections rates for different test stattistics
 
 rejection_rates<-function(df,n=20,stat_tests=uniformity_tests,alpha=0.05,n_iter=100000 ){
 
@@ -194,33 +198,15 @@ margin_coverage_ci <- function(coverage_vec, alpha = 0.05) {
 
 ##############  Data generating mechanisms & model
 
-# Generate synthetic  data
-generate_data  <- function(N = 10, seed = 978205, df=100, std = 0.2, beta1 = 1.5,resp_type="continuous") {
- 
-      if(resp_type=="continuous") {
-      # continuous data with student_t noise
-      set.seed(seed)
-      x1 <- rnorm(N) # Covariate
-      noise <-std*rt(N,df=df) #student_t  #std*rnorm(N)  # Gaussian noise
-      y <- beta1 * x1 + noise      # Response variable
-      }
-      else if(resp_type=="count") {
-        # count data from poisson dist
-        set.seed(seed)
-         x1 <- rnorm(N)  
-        lambda<-exp(beta1*x1)
-        y<-rpois(N,lambda)      
-      }
-      data.frame(x1 = x1, y = y)
-    }
-
 
 # simulate data to fit GP models ( Hilbert space based GP approximation)
- # load the stan file
+
+# load the stan file
 hsgp_model<- cmdstan_model("HSGP_simulate.stan")
 # writeLines(readLines(hsgp_model))
 
-simul_hsgp <- function(model=hsgp_model,bound=c(0,1),N=100,ls=0.2,sig=1,noise=0.3,M_f=160,c_f=3,inter_f=0.4,seed=111222){
+
+simul_hsgp <- function(model=hsgp_model,bound=c(0,1),N=100,ls=0.2,sig=1,noise=0.3,M_f=160,c_f=3,inter_f=0.4,c_ls=0.2,c_sig=1,seed=111222){
 
        x1=seq(bound[1],bound[2],length.out=N) # univariate input
        set.seed(seed)
@@ -241,7 +227,7 @@ simul_hsgp <- function(model=hsgp_model,bound=c(0,1),N=100,ls=0.2,sig=1,noise=0.
                                 chains=1, iter=1, iter_sampling=1)
   # draws
       y_sim=as.vector(unlist( as_draws_df(sim_hsgp_model)[,1:N]))
-      sim_data <- data.frame(x1=x1,y=y_sim) #,N=length(x1),c_f=c_f,M_f=M_f,lengthscale_f=c_ls,sigma_f=c_sig)
+      sim_data <- list(N=length(x1),x=x1,y=y_sim,c_f=c_f,M_f=M_f,lengthscale_f=c_ls,sigma_f=c_sig)
 
  return( sim_data)
 }
@@ -256,52 +242,17 @@ simul_hsgp <- function(model=hsgp_model,bound=c(0,1),N=100,ls=0.2,sig=1,noise=0.
 
 ##############  experiments  pipeline 
 
-# dummy data & model compilation
-sim_data<-generate_data(N=20)
-# choose model
-  # Gaussian noise
-lin_model_fit <- brm(y ~ x1, data =sim_data,
-
-                              prior=c(prior(normal(0,2), class="b"),
-                                      prior(normal(0,0.3),class="Intercept"),
-                                      prior(normal(0,0.5),class="sigma") ),
-                              silent = 2, refresh = 0, cores=4)
-
-# student t
- st_fit <- brm(
-  y ~ x1, 
-    data = sim_data,
-    family = student(), # control degrees of freedom 
-    prior = c(
-      prior(normal(0, 2), class = "b"),
-      prior(normal(0, 0.3), class = "Intercept"),
-      prior(normal(0, 0.5), class = "sigma"),
-      prior(constant(20),class="nu")),           # control the degree of freedom 
-    silent = 2, refresh = 0, cores = 4
-  ) 
-
 # GP model
-sim_data <- simul_hsgp(N=50,seed=42)
-#gp_model <-  cmdstan_model("gp_model.stan")
-#fit <- gp_model$sample(data=sim_data)
+#sim_data <- simul_hsgp(N=40,seed=42)
 
-  gp_fit <- brm(
-  y ~  gp(x1), # control linearity wiht gp hyperparams 
-  data = sim_data,
-  prior = c(
-   # prior(normal(0, 2), class = "b", coef="x1"),                   # linear effect 
-    prior(normal(0, 0.3), class = "Intercept"),                    # Prior for intercept
-    prior(normal(0, 0.4), class = "sigma"),                        # Prior for residual noise
-       prior(normal(1, 1e-6), class = "sdgp",coef="gpx1"),        # control  GP magnitude (std dev
-    prior(normal(0.2,1e-6), class = "lscale",coef="gpx1")         #control GP lengthscale
-  ),
-  silent = 2, refresh = 0, cores = 4
-  )
+gp_model <-  cmdstan_model("gp_model.stan")   # load and compile the gp_model 
+
+#fit <- gp_model$sample(data=sim_data,parallel_chains =4,show_messages = FALSE)
 
 
 ########################## experiment pipeline
 
-run_experiment<-function(brm_obj=st_fit, level=0.95,alpha=0.05,num_obs=c(10,20), K=4,stat_tests=uniformity_tests,seed=978205,seed_test=677222,summary_stats=list(mean=mean,var=var)) {
+run_experiment<-function(stan_model=gp_model, level=0.95,alpha=0.05,num_obs=c(10,20), K=4,stat_tests=uniformity_tests,seed=978205,seed_test=677222,seed_mc=42,summary_stats=list(mean=mean,var=var)) {
   
 #args:
   # brm_obj: stan model object
@@ -328,21 +279,23 @@ for (n in num_obs) {
    loo_pit_mat<-matrix(numeric(0), ncol = n, nrow =0)
    covered_pp<-numeric(K)
    covered_loo<-numeric(K)
- 
-  test_data<-generate_data(N=n, seed=seed_test+n)         # generate test data
+
+  
+   test_data <- simul_hsgp(N=n,seed=seed_test+n)         # generate test data
   
   # repeat accross datasets 
   
   for (k in 1:K) {
     
-     sim_data<-generate_data(N=n,seed=seed+k+n)             # generate observed data
+     sim_data <- simul_hsgp(N=n,seed=seed+n+k)           # generate observed data
         
      # fit the model to the data
-     fit<-update(brm_obj, newdata = sim_data)
+     fit <- stan_model$sample(data=sim_data,parallel_chains =4,show_messages = FALSE)
      # Coverage
-     # test-coverage state
-     y_pred_k<-posterior_predict(fit)
-     covered_pp[k]<-coverage_state(y_pred_k,test_data$y,level=level)
+    # test-coverage state
+     preds <- gp_model$generate_quantities(fit, data = test_data)            # set "seed" later
+     y_pred_test=preds$draws(format="matrix",variable="f")
+     covered_pp[k]<-coverage_state(y_pred_test,test_data$y,level=level)
      # loo-coverage state
      psis <- loo::psis(-log_lik(fit), cores = 4)
      loo_interval=loo_predictive_interval(fit, prob = level, psis_object = psis)
@@ -372,10 +325,11 @@ for (n in num_obs) {
   stat_loo_pit<- as.data.frame( sapply(stat_tests, function(f) apply(loo_pit_mat, 1, f) ))
 
   #pvaue-based decision: evaluate p-values at specified significance level (alpha)
-  pvals_pit <- compute_pvalues(stat_pit,n,stat_tests)         
+  pvals_pit <- compute_pvalues(stat_pit,n,stat_tests)
   pvals_test_pit<-compute_pvalues(stat_test_pit,n,stat_tests)
   pvals_loo_pit <- compute_pvalues(stat_loo_pit,n,stat_tests)
 
+  
   # map to  the corresponding number of observations used
   pit_summary_results[[paste0("num_obs_",n)]] <- list(pit=summary_pit,test_pit=summary_test_pit,loo_pit=summary_loo_pit)
   pvalues_results[[paste0("num_obs_",n)]] <-list(pit=pvals_pit,test_pit=pvals_test_pit,loo_pit=pvals_loo_pit) 
@@ -392,113 +346,39 @@ for (n in num_obs) {
 
 ##### trial
 
-Results<-run_experiment(K=500,num_obs=c(20,50,100,500))
-save(Results, file = "results_studentt_df_20.RData")
-Resumts <- load("results_studentt_df_80.RData")
+Results<-run_experiment(K=50,num_obs=c(20,40))
+
 print(Results)
 
-Rates<-rejection_rates(Results$statistics$num_obs_50$test_pit,n=50)
+Rates<-rejection_rates(Results$statistics$num_obs_20$pit,n=20)
 
 print(Rates)
 
 
-df=Results$pvalues$num_obs_500$pit
 
 
- df_long <- df %>%
-  pivot_longer(cols = everything(), names_to = "variable", values_to = "value")
-
-ggplot(df_long, aes(x = value)) +
-  geom_histogram(bins = 30, fill = "steelblue", color = "white") +
-  facet_wrap(~ variable, scales = "free") +
-  theme_bw()
 
 ########################################################### draft #######################################################################
 
 ## stan model
-yrep <- fit$draws(format = "matrix", variable = "y_rep")
+yrep <- fit$draws(format = "matrix", variable = "f")
 log_lik <- fit$draws(format = "matrix", variable = "log_lik")
 
 #compute weight
-pp_check(y, yrep, fun="pit_ecdf")
-w_to_use <- weights(fit$loo(save_psis=TRUE)$psis_object)
+pp_check(sim_data$y, yrep, fun="pit_ecdf")
+lw <- weights(fit$loo(save_psis=TRUE)$psis_object)
 
-# predict for new data
-preds <- model$generate_quantities(fit$draws(), data = new_data)
+# predict for new data : use new input x1 ? 
+test_data<- simul_hsgp(N=40,seed=111)
+preds <- gp_model$generate_quantities(fit, data = test_data,seed=222)
 
-
-
-
-
-########### Questions & discussions
-
- # Average accross datasets and store the results
-     # pit_vals_df<-data.frame(pit=colMeans(pit_mat),test_pit=colMeans(test_pit_mat),loo_pit=colMeans(loo_pit_mat))
-     # map to  the corresponding number of observations used
-     # PIT_results[[paste0("num_obs_",n)]]<-pit_vals_df
+y_pred_test=preds$draws(format="matrix",variable="f")
 
 
- ### Friday 25 summary:
-  # Information on how uniform the pit-vals are:
-     # * Use uniformity tests: KS, T1 and U1 : check Graphical uniformity test paper and code
-  # ** discuss with Aki about estimation the critical value ( threshold) for rejection ( samples exceding that value are rejected )
-  # ** 
-  
-# LOO-coverage (a bit  ambiguous) repeat simulations with new dataset and new left out observation (true ) ??? (
-    # check "loo_predict" from brms to help with computation using the pointwise loo predictive samples. 
-  
-  
-        
-# do we need to transform pit vals as it is done with for  power analysis in GUT paper ?
-# Find the threshold for rejection rate:  compute critical value for chosen test (on uniform) and use as a rejection for samples exceeding that value ??
-# compare base on the p-value ??
-# long story short: compare test statistic to critical value or evaluate p-value computed from the test statistic ?
+dim(y_pred_test[,-((ncol(y_pred_test)-2):ncol(y_pred_test))])
+y_pred_test[1,]
 
+plot(test_data$x,y_pred_test[3,-((ncol(y_pred_test)-2):ncol(y_pred_test))])
+plot(sim_data$x,sim_data$y)
 
-
-
-
-###### another ways to proceed 
-
-# critical vals computation
-compute_critical_val <- function(statistic=kolmogorov_test,sample_size=50, n_iterations = 100000, alpha = 0.05) {
-
- #generate random numbers from the null dist ( uniform distribution U(0, 1) ). For each sample, the test s tatistic T is calculated and stored in ascending order. The critical value t is estimated by using the T -value placed in the position "[n_iterations(1-alpha)] + 1".
-  
-  # approximate the sampling distribution of the test statistic under the null hypothesis. 
-  T_values <- replicate(n_iterations, {
-    sample<- runif(sample_size)    # Simulate data under the null hypothesis (Uniform[0,1])
-    statistic(sample)              # Calculate the test statistic for the simulated data
-  })
-
-  # Sort T values  ( order statistic)
-  T_values <- sort(T_values)
-  # Calculate the index for the (1 - alpha) quantile
-  crit_val_index <- ceiling((1 - alpha) * n_iterations)
-  # Get the critical value from sorted test statistics
-  critical_value <- T_values[crit_val_index]
-  return(critical_value)
-}
-
-
-
-
-# p-values computation
-compute_pvals <- function(obs_stats,size,T,n_iter=1000){
-  #obs_stat (df) : observed statistics over experiment for different Tests.
-
-     # Vectorized computation of  p(T>=t) via MC simulation
-
-  # Samples dist of different test the under the null ( df )
-  
-     pvals<- vapply(obs_stats, function(t) mean( mc_simulation(T,size,n_iter) >= t ), FUN.VALUE = numeric(1) ) 
-
-       # names(pvals) <- names(obs_stat_df) 
-            return(pvals)
-      }
-    ## compute rejections rates for different test stattistics
-
-
-  #pvals_pit  as.data.frame( sapply(stat_tests, function(T) compute_pvals( apply(pit_mat, 1, T) ),n,T ))
-  #pvals_test_pit  as.data.frame( sapply(stat_tests, function(T) compute_pvals( apply(test_pit_mat, 1, T) ),n,T ))
-  #pvals_loo_pit  as.data.frame( sapply(stat_tests, function(T) compute_pvals( apply(loo_pit_mat, 1, T) ),n,T ))
+y_pred_test
