@@ -1,0 +1,60 @@
+Assuming unrestricted shared filesystem usage.
+None
+host: l24-0691
+Building DAG of jobs...
+Using shell: /usr/bin/bash
+Provided cores: 16
+Rules claiming more threads will be scaled down.
+Job stats:
+job        count
+-------  -------
+compile        4
+total          4
+
+Select jobs to execute...
+Execute 4 jobs...
+[Wed May 28 20:41:36 2025]
+localrule compile:
+    output: results/results-varying_nu-student_t-df_9999-beta_9999-n_128.rds, results/rates-varying_nu-student_t-df_9999-beta_9999-n_128.rds
+    jobid: 2
+    reason: Missing output files: results/results-varying_nu-student_t-df_9999-beta_9999-n_128.rds
+    wildcards: style=varying_nu, dgp=student_t, df=9999, beta=9999, n=128
+    resources: tmpdir=/tmp
+
+[Wed May 28 20:41:36 2025]
+localrule compile:
+    output: results/results-varying_nu-student_t-df_9999-beta_9999-n_64.rds, results/rates-varying_nu-student_t-df_9999-beta_9999-n_64.rds
+    jobid: 0
+    reason: Missing output files: results/results-varying_nu-student_t-df_9999-beta_9999-n_64.rds
+    wildcards: style=varying_nu, dgp=student_t, df=9999, beta=9999, n=64
+    resources: tmpdir=/tmp
+
+[Wed May 28 20:41:36 2025]
+localrule compile:
+    output: results/results-varying_nu-student_t-df_9999-beta_9999-n_32.rds, results/rates-varying_nu-student_t-df_9999-beta_9999-n_32.rds
+    jobid: 1
+    reason: Missing output files: results/results-varying_nu-student_t-df_9999-beta_9999-n_32.rds
+    wildcards: style=varying_nu, dgp=student_t, df=9999, beta=9999, n=32
+    resources: tmpdir=/tmp
+
+[Wed May 28 20:41:36 2025]
+localrule compile:
+    output: results/results-varying_nu-student_t-df_9999-beta_9999-n_16.rds, results/rates-varying_nu-student_t-df_9999-beta_9999-n_16.rds
+    jobid: 3
+    reason: Missing output files: results/results-varying_nu-student_t-df_9999-beta_9999-n_16.rds
+    wildcards: style=varying_nu, dgp=student_t, df=9999, beta=9999, n=16
+    resources: tmpdir=/tmp
+
+[Thu May 29 00:17:40 2025]
+Finished jobid: 3 (Rule: compile)
+1 of 4 steps (25%) done
+[Thu May 29 01:43:26 2025]
+Finished jobid: 1 (Rule: compile)
+2 of 4 steps (50%) done
+[Thu May 29 04:13:19 2025]
+Finished jobid: 0 (Rule: compile)
+3 of 4 steps (75%) done
+[Thu May 29 09:06:15 2025]
+Finished jobid: 2 (Rule: compile)
+4 of 4 steps (100%) done
+Complete log(s): /u/84/tessoh1/data/Desktop/Git Repositories/LOO-PIT-Project/.snakemake/log/2025-05-28T204136.629626.snakemake.log

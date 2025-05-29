@@ -1,0 +1,11 @@
+Assuming unrestricted shared filesystem usage.
+None
+host: l24-0691
+Building DAG of jobs...
+MissingInputException in rule compile in file "/u/84/tessoh1/data/Desktop/Git Repositories/LOO-PIT-Project/Snakefile", line 1:
+Missing input files for rule compile:
+    output: results/results-{varying_beta}-{hsgp}-df_{9999}-beta_{9999}-n_{32}.rds, results/rates-{varying_beta}-{hsgp}-df_{9999}-beta_{9999}-n_{32}.rds
+    wildcards: style={varying_beta}, dgp={hsgp}, df={9999}, beta={9999}, n={32}
+    affected files:
+        {varying_beta}
+        {hsgp}

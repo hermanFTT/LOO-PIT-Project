@@ -1,0 +1,27 @@
+Assuming unrestricted shared filesystem usage.
+None
+host: l24-0691
+Building DAG of jobs...
+Using shell: /usr/bin/bash
+Provided cores: 4
+Rules claiming more threads will be scaled down.
+Job stats:
+job        count
+-------  -------
+compile        1
+total          1
+
+Select jobs to execute...
+Execute 1 jobs...
+[Tue May 27 00:06:36 2025]
+localrule compile:
+    output: results/results-varying_beta-hsgp-df_9999-beta_9999-n_16.rds, results/rates-varying_beta-hsgp-df_9999-beta_9999-n_16.rds
+    jobid: 0
+    reason: Missing output files: results/results-varying_beta-hsgp-df_9999-beta_9999-n_16.rds
+    wildcards: style=varying_beta, dgp=hsgp, df=9999, beta=9999, n=16
+    resources: tmpdir=/tmp
+
+[Tue May 27 00:15:34 2025]
+Finished jobid: 0 (Rule: compile)
+1 of 1 steps (100%) done
+Complete log(s): /u/84/tessoh1/data/Desktop/Git Repositories/LOO-PIT-Project/.snakemake/log/2025-05-27T000636.306321.snakemake.log

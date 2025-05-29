@@ -1,0 +1,38 @@
+Assuming unrestricted shared filesystem usage.
+None
+host: l24-0691
+Building DAG of jobs...
+Using shell: /usr/bin/bash
+Provided cores: 16
+Rules claiming more threads will be scaled down.
+Job stats:
+job        count
+-------  -------
+compile        2
+total          2
+
+Select jobs to execute...
+Execute 2 jobs...
+[Wed May 28 01:58:19 2025]
+localrule compile:
+    output: results/results-varying_N-student_t-df_40-beta_9999-n_9999.rds, results/rates-varying_N-student_t-df_40-beta_9999-n_9999.rds
+    jobid: 0
+    reason: Missing output files: results/results-varying_N-student_t-df_40-beta_9999-n_9999.rds
+    wildcards: style=varying_N, dgp=student_t, df=40, beta=9999, n=9999
+    resources: tmpdir=/tmp
+
+[Wed May 28 01:58:19 2025]
+localrule compile:
+    output: results/results-varying_N-student_t-df_5-beta_9999-n_9999.rds, results/rates-varying_N-student_t-df_5-beta_9999-n_9999.rds
+    jobid: 1
+    reason: Missing output files: results/results-varying_N-student_t-df_5-beta_9999-n_9999.rds
+    wildcards: style=varying_N, dgp=student_t, df=5, beta=9999, n=9999
+    resources: tmpdir=/tmp
+
+[Wed May 28 08:47:43 2025]
+Finished jobid: 0 (Rule: compile)
+1 of 2 steps (50%) done
+[Wed May 28 08:50:46 2025]
+Finished jobid: 1 (Rule: compile)
+2 of 2 steps (100%) done
+Complete log(s): /u/84/tessoh1/data/Desktop/Git Repositories/LOO-PIT-Project/.snakemake/log/2025-05-28T015819.497009.snakemake.log

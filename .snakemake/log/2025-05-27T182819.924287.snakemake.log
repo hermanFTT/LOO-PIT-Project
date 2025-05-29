@@ -1,0 +1,49 @@
+Assuming unrestricted shared filesystem usage.
+None
+host: l24-0691
+Building DAG of jobs...
+Using shell: /usr/bin/bash
+Provided cores: 16
+Rules claiming more threads will be scaled down.
+Job stats:
+job        count
+-------  -------
+compile        3
+total          3
+
+Select jobs to execute...
+Execute 3 jobs...
+[Tue May 27 18:28:19 2025]
+localrule compile:
+    output: results/results-varying_N-student_t-df_2-beta_9999-n_9999.rds, results/rates-varying_N-student_t-df_2-beta_9999-n_9999.rds
+    jobid: 2
+    reason: Missing output files: results/results-varying_N-student_t-df_2-beta_9999-n_9999.rds
+    wildcards: style=varying_N, dgp=student_t, df=2, beta=9999, n=9999
+    resources: tmpdir=/tmp
+
+[Tue May 27 18:28:19 2025]
+localrule compile:
+    output: results/results-varying_N-student_t-df_10-beta_9999-n_9999.rds, results/rates-varying_N-student_t-df_10-beta_9999-n_9999.rds
+    jobid: 1
+    reason: Missing output files: results/results-varying_N-student_t-df_10-beta_9999-n_9999.rds
+    wildcards: style=varying_N, dgp=student_t, df=10, beta=9999, n=9999
+    resources: tmpdir=/tmp
+
+[Tue May 27 18:28:19 2025]
+localrule compile:
+    output: results/results-varying_N-student_t-df_100-beta_9999-n_9999.rds, results/rates-varying_N-student_t-df_100-beta_9999-n_9999.rds
+    jobid: 0
+    reason: Missing output files: results/results-varying_N-student_t-df_100-beta_9999-n_9999.rds
+    wildcards: style=varying_N, dgp=student_t, df=100, beta=9999, n=9999
+    resources: tmpdir=/tmp
+
+[Wed May 28 01:51:43 2025]
+Finished jobid: 1 (Rule: compile)
+1 of 3 steps (33%) done
+[Wed May 28 01:52:56 2025]
+Finished jobid: 0 (Rule: compile)
+2 of 3 steps (67%) done
+[Wed May 28 01:53:44 2025]
+Finished jobid: 2 (Rule: compile)
+3 of 3 steps (100%) done
+Complete log(s): /u/84/tessoh1/data/Desktop/Git Repositories/LOO-PIT-Project/.snakemake/log/2025-05-27T182819.924287.snakemake.log

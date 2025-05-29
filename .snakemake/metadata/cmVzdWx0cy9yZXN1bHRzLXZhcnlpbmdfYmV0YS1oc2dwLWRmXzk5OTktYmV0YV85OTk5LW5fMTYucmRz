@@ -1,0 +1,1 @@
+{"record_format_version": 6, "code": null, "rule": "compile", "input": [], "log": [], "params": ["15", "200"], "shellcmd": null, "incomplete": false, "starttime": 1748294613.2333314, "endtime": 1748305121.667872, "job_hash": 8699068647531, "conda_env": null, "software_stack_hash": "d41d8cd98f00b204e9800998ecf8427e", "container_img_url": null, "input_checksums": {}}
