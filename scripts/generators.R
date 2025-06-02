@@ -13,7 +13,7 @@ simul_stt<- function(N = 10,beta=0.2,seed=111,df=100) {
     }
 
 
-
+#
 
 simul_count <- function(N=10, beta=0.8,seed=222,df=100) {
   # count data from poisson dist
@@ -25,7 +25,7 @@ simul_count <- function(N=10, beta=0.8,seed=222,df=100) {
         return(sim_data)
       }
 
-
+# rnbinom(n = 400, size = 1e3, mu = 10) # control overall dispersion "size" 
 
 # simulate data with GP models ( Hilbert space based GP approximation)
  # load the stan file

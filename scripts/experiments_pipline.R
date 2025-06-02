@@ -76,9 +76,9 @@ for (n in num_obs) {
          # Compute pit with different approaches (pit, test_pit, loo_pit)
          pit_vals<-compute_all_pit(fit,psis,sim_data,test_data)
          # Store 
-         pit_mat<-rbind(pit_mat,pit_vals$pit)
-         test_pit_mat<-rbind(test_pit_mat,pit_vals$test_pit)
-         loo_pit_mat<-rbind(loo_pit_mat,pit_vals$loo_pit)
+         pit_mat<-rbind(pit_mat,sort(pit_vals$pit))
+         test_pit_mat<-rbind(test_pit_mat,sort(pit_vals$test_pit))
+         loo_pit_mat<-rbind(loo_pit_mat,sort(pit_vals$loo_pit))
     rm(fit)
   gc() }
   
@@ -209,9 +209,9 @@ pit_summary_results <- list()
          # Compute pit with different approaches (pit, test_pit, loo_pit)
          pit_vals<-compute_all_pit(fit,psis,sim_data,test_data)
          # Store 
-         pit_mat<-rbind(pit_mat,pit_vals$pit)
-         test_pit_mat<-rbind(test_pit_mat,pit_vals$test_pit)
-         loo_pit_mat<-rbind(loo_pit_mat,pit_vals$loo_pit)
+         pit_mat<-rbind(pit_mat, sort(pit_vals$pit))
+         test_pit_mat<-rbind(test_pit_mat,sort(pit_vals$test_pit))
+         loo_pit_mat<-rbind(loo_pit_mat,sort(pit_vals$loo_pit))
 
     rm(fit)
     gc()    }
@@ -340,9 +340,9 @@ pit_summary_results <- list()
          # Compute pit with different approaches (pit, test_pit, loo_pit)
          pit_vals<-compute_all_pit(fit,psis,sim_data,test_data)
          # Store 
-         pit_mat<-rbind(pit_mat,pit_vals$pit)
-         test_pit_mat<-rbind(test_pit_mat,pit_vals$test_pit)
-         loo_pit_mat<-rbind(loo_pit_mat,pit_vals$loo_pit)
+         pit_mat<-rbind(pit_mat,sort(pit_vals$pit))
+         test_pit_mat<-rbind(test_pit_mat,sort(pit_vals$test_pit))
+         loo_pit_mat<-rbind(loo_pit_mat,sort(pit_vals$loo_pit))
 
     rm(fit)
     gc()    }

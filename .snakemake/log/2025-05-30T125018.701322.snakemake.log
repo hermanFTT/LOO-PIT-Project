@@ -1,0 +1,99 @@
+Assuming unrestricted shared filesystem usage.
+None
+host: l24-0691
+Building DAG of jobs...
+Using shell: /usr/bin/bash
+Provided cores: 16
+Rules claiming more threads will be scaled down.
+Job stats:
+job        count
+-------  -------
+compile        5
+total          5
+
+Select jobs to execute...
+Execute 5 jobs...
+[Fri May 30 12:50:18 2025]
+localrule compile:
+    output: results/results-varying_N-hsgp-df_9999-beta_0.4-n_9999.rds, results/rates-varying_N-hsgp-df_9999-beta_0.4-n_9999.rds
+    jobid: 4
+    reason: Missing output files: results/results-varying_N-hsgp-df_9999-beta_0.4-n_9999.rds
+    wildcards: style=varying_N, dgp=hsgp, df=9999, beta=0.4, n=9999
+    resources: tmpdir=/tmp
+
+[Fri May 30 12:50:18 2025]
+localrule compile:
+    output: results/results-varying_N-hsgp-df_9999-beta_0.6-n_9999.rds, results/rates-varying_N-hsgp-df_9999-beta_0.6-n_9999.rds
+    jobid: 3
+    reason: Missing output files: results/results-varying_N-hsgp-df_9999-beta_0.6-n_9999.rds
+    wildcards: style=varying_N, dgp=hsgp, df=9999, beta=0.6, n=9999
+    resources: tmpdir=/tmp
+
+[Fri May 30 12:50:18 2025]
+localrule compile:
+    output: results/results-varying_N-hsgp-df_9999-beta_0.2-n_9999.rds, results/rates-varying_N-hsgp-df_9999-beta_0.2-n_9999.rds
+    jobid: 2
+    reason: Missing output files: results/results-varying_N-hsgp-df_9999-beta_0.2-n_9999.rds
+    wildcards: style=varying_N, dgp=hsgp, df=9999, beta=0.2, n=9999
+    resources: tmpdir=/tmp
+
+[Fri May 30 12:50:18 2025]
+localrule compile:
+    output: results/results-varying_N-hsgp-df_9999-beta_0.8-n_9999.rds, results/rates-varying_N-hsgp-df_9999-beta_0.8-n_9999.rds
+    jobid: 0
+    reason: Missing output files: results/results-varying_N-hsgp-df_9999-beta_0.8-n_9999.rds
+    wildcards: style=varying_N, dgp=hsgp, df=9999, beta=0.8, n=9999
+    resources: tmpdir=/tmp
+
+[Fri May 30 12:50:18 2025]
+localrule compile:
+    output: results/results-varying_N-hsgp-df_9999-beta_0.95-n_9999.rds, results/rates-varying_N-hsgp-df_9999-beta_0.95-n_9999.rds
+    jobid: 1
+    reason: Missing output files: results/results-varying_N-hsgp-df_9999-beta_0.95-n_9999.rds
+    wildcards: style=varying_N, dgp=hsgp, df=9999, beta=0.95, n=9999
+    resources: tmpdir=/tmp
+
+Terminating processes on user request, this might take some time.
+RuleException:
+CalledProcessError in file "/u/84/tessoh1/data/Desktop/Git Repositories/LOO-PIT-Project/Snakefile", line 9:
+Command 'set -euo pipefail;  Rscript --vanilla '/u/84/tessoh1/data/Desktop/Git Repositories/LOO-PIT-Project/.snakemake/scripts/tmpcos839se.main.R'' returned non-zero exit status 1.
+[Fri May 30 12:50:42 2025]
+Error in rule compile:
+    message: None
+    jobid: 1
+    output: results/results-varying_N-hsgp-df_9999-beta_0.95-n_9999.rds, results/rates-varying_N-hsgp-df_9999-beta_0.95-n_9999.rds
+RuleException:
+CalledProcessError in file "/u/84/tessoh1/data/Desktop/Git Repositories/LOO-PIT-Project/Snakefile", line 9:
+Command 'set -euo pipefail;  Rscript --vanilla '/u/84/tessoh1/data/Desktop/Git Repositories/LOO-PIT-Project/.snakemake/scripts/tmpci8ool5u.main.R'' returned non-zero exit status 1.
+[Fri May 30 12:50:42 2025]
+Error in rule compile:
+    message: None
+    jobid: 0
+    output: results/results-varying_N-hsgp-df_9999-beta_0.8-n_9999.rds, results/rates-varying_N-hsgp-df_9999-beta_0.8-n_9999.rds
+RuleException:
+CalledProcessError in file "/u/84/tessoh1/data/Desktop/Git Repositories/LOO-PIT-Project/Snakefile", line 9:
+Command 'set -euo pipefail;  Rscript --vanilla '/u/84/tessoh1/data/Desktop/Git Repositories/LOO-PIT-Project/.snakemake/scripts/tmpxakiz5t5.main.R'' returned non-zero exit status 1.
+[Fri May 30 12:50:42 2025]
+Error in rule compile:
+    message: None
+    jobid: 4
+    output: results/results-varying_N-hsgp-df_9999-beta_0.4-n_9999.rds, results/rates-varying_N-hsgp-df_9999-beta_0.4-n_9999.rds
+RuleException:
+CalledProcessError in file "/u/84/tessoh1/data/Desktop/Git Repositories/LOO-PIT-Project/Snakefile", line 9:
+Command 'set -euo pipefail;  Rscript --vanilla '/u/84/tessoh1/data/Desktop/Git Repositories/LOO-PIT-Project/.snakemake/scripts/tmpo3omm4bo.main.R'' returned non-zero exit status 1.
+[Fri May 30 12:50:42 2025]
+Error in rule compile:
+    message: None
+    jobid: 2
+    output: results/results-varying_N-hsgp-df_9999-beta_0.2-n_9999.rds, results/rates-varying_N-hsgp-df_9999-beta_0.2-n_9999.rds
+RuleException:
+CalledProcessError in file "/u/84/tessoh1/data/Desktop/Git Repositories/LOO-PIT-Project/Snakefile", line 9:
+Command 'set -euo pipefail;  Rscript --vanilla '/u/84/tessoh1/data/Desktop/Git Repositories/LOO-PIT-Project/.snakemake/scripts/tmp7xhg9p8f.main.R'' returned non-zero exit status 1.
+[Fri May 30 12:50:42 2025]
+Error in rule compile:
+    message: None
+    jobid: 3
+    output: results/results-varying_N-hsgp-df_9999-beta_0.6-n_9999.rds, results/rates-varying_N-hsgp-df_9999-beta_0.6-n_9999.rds
+Complete log(s): /u/84/tessoh1/data/Desktop/Git Repositories/LOO-PIT-Project/.snakemake/log/2025-05-30T125018.701322.snakemake.log
+WorkflowError:
+At least one job did not complete successfully.

@@ -91,7 +91,7 @@ beta_s<-c(0.2,0.4,0.6,0.8,0.95)    # ( fix N,  control non linearity in GP based
 
 df_s <-c(1,5,10,20,40,80,100)       # (fixed N ,  control the degree of freedom in student t based dgp )
 
-levels <- seq(0.05,0.95,by=0.0125)  # levels ( widths of central intervals for predictive coverage)
+levels <- seq(0.05,0.95,by=0.025)  # levels ( widths of central intervals for predictive coverage)
 
 
 

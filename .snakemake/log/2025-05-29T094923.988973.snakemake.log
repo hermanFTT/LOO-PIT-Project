@@ -21,3 +21,7 @@ localrule compile:
     wildcards: style=varying_nu, dgp=student_t, df=9999, beta=9999, n=256
     resources: tmpdir=/tmp
 
+[Fri May 30 08:21:27 2025]
+Finished jobid: 0 (Rule: compile)
+1 of 1 steps (100%) done
+Complete log(s): /u/84/tessoh1/data/Desktop/Git Repositories/LOO-PIT-Project/.snakemake/log/2025-05-29T094923.988973.snakemake.log

@@ -1,0 +1,71 @@
+Assuming unrestricted shared filesystem usage.
+None
+host: l24-0691
+Building DAG of jobs...
+Using shell: /usr/bin/bash
+Provided cores: 16
+Rules claiming more threads will be scaled down.
+Job stats:
+job        count
+-------  -------
+compile        5
+total          5
+
+Select jobs to execute...
+Execute 5 jobs...
+[Fri May 30 12:50:56 2025]
+localrule compile:
+    output: results/results-varying_N-hsgp-df_9999-beta_0.95-n_9999.rds, results/rates-varying_N-hsgp-df_9999-beta_0.95-n_9999.rds
+    jobid: 4
+    reason: Missing output files: results/results-varying_N-hsgp-df_9999-beta_0.95-n_9999.rds
+    wildcards: style=varying_N, dgp=hsgp, df=9999, beta=0.95, n=9999
+    resources: tmpdir=/tmp
+
+[Fri May 30 12:50:56 2025]
+localrule compile:
+    output: results/results-varying_N-hsgp-df_9999-beta_0.8-n_9999.rds, results/rates-varying_N-hsgp-df_9999-beta_0.8-n_9999.rds
+    jobid: 3
+    reason: Missing output files: results/results-varying_N-hsgp-df_9999-beta_0.8-n_9999.rds
+    wildcards: style=varying_N, dgp=hsgp, df=9999, beta=0.8, n=9999
+    resources: tmpdir=/tmp
+
+[Fri May 30 12:50:56 2025]
+localrule compile:
+    output: results/results-varying_N-hsgp-df_9999-beta_0.4-n_9999.rds, results/rates-varying_N-hsgp-df_9999-beta_0.4-n_9999.rds
+    jobid: 2
+    reason: Missing output files: results/results-varying_N-hsgp-df_9999-beta_0.4-n_9999.rds
+    wildcards: style=varying_N, dgp=hsgp, df=9999, beta=0.4, n=9999
+    resources: tmpdir=/tmp
+
+[Fri May 30 12:50:56 2025]
+localrule compile:
+    output: results/results-varying_N-hsgp-df_9999-beta_0.2-n_9999.rds, results/rates-varying_N-hsgp-df_9999-beta_0.2-n_9999.rds
+    jobid: 0
+    reason: Missing output files: results/results-varying_N-hsgp-df_9999-beta_0.2-n_9999.rds
+    wildcards: style=varying_N, dgp=hsgp, df=9999, beta=0.2, n=9999
+    resources: tmpdir=/tmp
+
+[Fri May 30 12:50:56 2025]
+localrule compile:
+    output: results/results-varying_N-hsgp-df_9999-beta_0.6-n_9999.rds, results/rates-varying_N-hsgp-df_9999-beta_0.6-n_9999.rds
+    jobid: 1
+    reason: Missing output files: results/results-varying_N-hsgp-df_9999-beta_0.6-n_9999.rds
+    wildcards: style=varying_N, dgp=hsgp, df=9999, beta=0.6, n=9999
+    resources: tmpdir=/tmp
+
+[Fri May 30 18:26:20 2025]
+Finished jobid: 2 (Rule: compile)
+1 of 5 steps (20%) done
+[Fri May 30 18:26:46 2025]
+Finished jobid: 3 (Rule: compile)
+2 of 5 steps (40%) done
+[Fri May 30 18:28:15 2025]
+Finished jobid: 1 (Rule: compile)
+3 of 5 steps (60%) done
+[Fri May 30 18:29:43 2025]
+Finished jobid: 4 (Rule: compile)
+4 of 5 steps (80%) done
+[Fri May 30 18:32:32 2025]
+Finished jobid: 0 (Rule: compile)
+5 of 5 steps (100%) done
+Complete log(s): /u/84/tessoh1/data/Desktop/Git Repositories/LOO-PIT-Project/.snakemake/log/2025-05-30T125056.076031.snakemake.log

@@ -14,10 +14,10 @@ df_s <-c(1,5,10,20,40,80,100)       # (fixed N ,  control the degree of freedom 
 
 ##################################################################################################################
 
-
-Results <- readRDS("results/results-varying_nu-student_t-df_9999-beta_9999-n_32.rds")
-rej_rates <-readRDS("results/rates-varying_nu-student_t-df_9999-beta_9999-n_32.rds")
-N <- 32
+# varying nu
+Results <- readRDS("results/student_t_varying_nu/results-varying_nu-student_t-df_9999-beta_9999-n_256.rds")
+rej_rates <-readRDS("results/student_t_varying_nu/rates-varying_nu-student_t-df_9999-beta_9999-n_256.rds")
+N <- 256
 
 param<- paste0(paste0(TeX("$n$")," = "),N )  # fixed argument ( in this case the num_obs)
 p1 <- comb_rejection_plot(rej_rates,obs_sizes=NULL,bs=NULL,nu_s=df_s,title=TRUE,x_lab=TeX("$\\nu$"),row_descript=param,legend=TRUE)
@@ -38,7 +38,7 @@ ggsave(glue("results/figures/cov-stt-df_{df_s[id]}-n_{N}.pdf"), plot =p2, width 
 
 
 
-id <- 4
+id <- 5
 # histogram plot of the averaged  pit values (specify "beta" val )
 a <- comb_hist(Results,n=NULL,beta=NULL,nu=df_s[id],bins=20,title=TRUE)
 b <- comb_hist(Results,n=NULL,beta=NULL,nu=df_s[id+1],bins=20,title=TRUE)
@@ -46,6 +46,17 @@ c <- wrap_plots(a, b, ncol = 1)+
 plot_annotation(caption = glue("Averaged pit vals over S=200 simulations. DGP: student-t (df = {df_s[id]},{df_s[id+1]}), fit: normal model, N= {N} observations."),theme = theme(  plot.caption = element_text( hjust = 0.5,size = 11),plot.caption.position = "plot")  )
 
 ggsave(glue("results/figures/hist-stt-df_{df_s[id]},{df_s[id+1]}-n_{N}.pdf"), plot =c, width = 8, height = 8, dpi = 300,device = cairo_pdf)
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -78,7 +89,7 @@ ggsave(glue("results/figures/cov-hsgp-beta_{beta_s[id]}-n_{N}.pdf"), plot =p2, w
 
 
 
-id <- 4
+id <- 1
 # histogram plot of the averaged  pit values (specify "beta" val )
 a <- comb_hist(Results,n=NULL,beta=beta_s[id],nu=NULL,bins=20,title=TRUE)
 b <- comb_hist(Results,n=NULL,beta=beta_s[id+1],nu=NULL,bins=20,title=TRUE)
